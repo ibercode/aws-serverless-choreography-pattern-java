@@ -1,0 +1,58 @@
+{
+    "MoviesTable": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "movieId": {"S": "1111"},
+                    "title": {"S": "Three and a half men"},
+                    "genre": {"S": "comedy"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "movieId": {"S": "2222"},
+                    "title": {"S": "Batman"},
+                    "genre": {"S": "action"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "movieId": {"S": "3333"},
+                    "title": {"S": "Seinfeld"},
+                    "genre": {"S": "comedy"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "movieId": {"S": "4444"},
+                    "title": {"S": "Die Hard"},
+                    "genre": {"S": "action"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "movieId": {"S": "5555"},
+                    "title": {"S": "Millions"},
+                    "genre": {"S": "drama"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "movieId": {"S": "6666"},
+                    "title": {"S": "Matrix"},
+                    "genre": {"S": "sci-fi"}
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "CinemasTable": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "cinemaId": {"S": "aaaa"},
+                    "name": {"S": "Golden Star"},
+                    "movies": {
+                        "L": [
+                            {
+                                "S": "2222"
+                            },
+                            {
+                                "S": "4444"
+                            },
+                            {
+                                "S": "5555"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "cinemaId": {"S": "bbbb"},
+                    "name": {"S": "Entertainment Theatre"},
+                    "movies": {
+                        "L": [
+                            {
+                                "S": "1111"
+                            },
+                            {
+                                "S": "3333"
+                            },
+                            {
+                                "S": "6666"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: choreography-pattern
+
+Globals:
+  Function:
+    Runtime: java11
+    MemorySize: 3072
+    Timeout: 30
+  Api:
+    OpenApiVersion: '3.0.1'
+
+Resources:
+  #API Gateway
+  CinemaAPIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Name: CinemaAPIGateway
+
+#Lambdas
+  CinemaCatalog:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CinemaCatalog
+      Handler: com.ibercode.cinema.CinemaCatalog::handleRequest
+      CodeUri: target/sourceCode.zip
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /cinema/{cinemaId}/movies
+            Method: GET
+            RestApiId: !Ref CinemaAPIGateway
+      Environment:
+        Variables:
+          CINEMAS_TABLE: !Ref CinemasTable
+          CINEMA_MS: !Ref Movies
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref Movies
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CinemasTable
+
+  Movies:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Movies
+      Handler: com.ibercode.movies.Movies::handleRequest
+      CodeUri: target/sourceCode.zip
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MoviesTable
+      Environment:
+        Variables:
+          MOVIES_TABLE: !Ref MoviesTable
+
+  #DynamoDB Tables
+  CinemasTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: CinemasTable
+      AttributeDefinitions:
+        - AttributeName: cinemaId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: cinemaId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  MoviesTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: MoviesTable
+      AttributeDefinitions:
+        - AttributeName: movieId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: movieId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+
+Outputs:
+  PaymentsEndpoint:
+    Description: API Gateway Cinema Endpoint
+    Value:
+      Fn::Sub: https://${CinemaAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/cinema
